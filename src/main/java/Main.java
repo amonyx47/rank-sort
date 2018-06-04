@@ -11,11 +11,13 @@ public class Main {
         System.out.println("Pouzitie programu rank sort.");
         System.out.println("Pocitat sa bude pole dlzky 50 000 so vsetkymi aktualne dostupnymi procesormi (simulujeme threadmi), t.j. kolko procesorov - tolko threadov.");
         System.out.println("Najprv sa zadava jedno cislo: kolko prvkov v poli chceme mat.");
+        System.out.println("Potom sa zadava cislo: pocet procesorov na vypocet.");
         System.out.println("Potom sa zadava jedno cislo: 0 ak chceme nahodne cisla a 1 (alebo ine, rozdielne od 0) ak chceme rovnake cisla v poli.");
 
         System.out.println("Zadaj dlzku pola: ");
         int elemQuantity = scan.nextInt();
-        int threadNum = Runtime.getRuntime().availableProcessors();
+        System.out.println("Zadaj pocet procesorov: ");
+        int threadNum = scan.nextInt();
         System.out.println("Pocet procesorov (threadov): " + threadNum);
         System.out.println("Vygenerovat pole nahodnych (0) alebo vygenerovat pole rovnakych cisel (1): ");
         int random = scan.nextInt();
@@ -37,11 +39,11 @@ public class Main {
         if (random == 0) {
             for (int i = 0; i < elemQuantity; i++) {
                 Random rand = new Random();
-                arrayToSort[i] = rand.nextInt();
+                arrayToSort[i] = rand.nextInt(100);
             }
         } else {
             Random rand = new Random();
-            int randomNum = rand.nextInt();
+            int randomNum = rand.nextInt(100);
             Arrays.fill(arrayToSort, randomNum);
         }
 
@@ -50,6 +52,7 @@ public class Main {
 
         // pocet blokov
         int blockSize = elemQuantity / threadNum;
+        System.out.println("Velkost blokov, ktory rankujeme: " + blockSize);
 
         // spustime thready
         RankThread threads[] = new RankThread[threadNum];
@@ -57,6 +60,8 @@ public class Main {
             threads[i] = new RankThread(arrayToSort, resultArray, threadNum, i);
             threads[i].start();
         }
+
+        //prebieha vypocet rankingu...
 
         // spojime thready
         try {

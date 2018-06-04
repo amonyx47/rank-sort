@@ -40,25 +40,31 @@ class RankThread extends Thread {
 
         System.out.println("Som thread: " + threadName);
         System.out.println("Moje poradove cislo: " + currentThreadNum);
-        System.out.println("Velkost bloku, ktory rankujem: " + blockSize);
 
+
+        //zistime, ktora cast bloku zaciatocneho pola nam prislucha podla poradoveho cisla procesoru
         if (threadNum - 1 == currentThreadNum) {
             endIndex = arrayToSort.length;
         } else {
             endIndex = (currentThreadNum + 1) * blockSize;
         }
 
+        //ideme od zaciatku urceneho bloku po koniec urceneho bloku
         for (int j = startIndex; j < endIndex; j++) {
             currentItem = arrayToSort[j];
-            currentPosition = 0;
+            currentPosition = 0; //pamatame si poziciu, ak by sa vyskytlo viac rovnakych prvkov
+            //ideme cez cele zaciatocne pole
             for (int i = 0; i < arrayToSort.length; i++) {
+                //ak je prvok, ktory mame vo vonkajsom cykle vacsi zvacsime rank
                 if (currentItem > arrayToSort[i]) {
                     currentPosition++;
                 }
+                //ak je prvok rovnaky (podmienkou j < i zistime, ci je za nim), zvysime rank
                 if ((currentItem == arrayToSort[i]) && (j < i)) {
                     currentPosition++;
                 }
             }
+            System.out.println("Radim cislo " + currentItem + " na poziciu " + currentPosition);
             resultArray[currentPosition] = currentItem;
         }
 
